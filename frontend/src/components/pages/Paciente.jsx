@@ -1,0 +1,67 @@
+// pages/Paciente.jsx
+import React, { useState } from 'react';
+import Header from '../paciente/Header';
+import Sidebar from '../paciente/Sidebar';
+import Dashboard from '../paciente/Dashboard';
+import Profile from '../paciente/Profile';
+import History from '../paciente/History';
+import Appointments from '../paciente/Appointments';
+import Notifications from '../paciente/Notifications';
+import Location from '../paciente/Location';
+import Education from '../paciente/Education';
+import { mockData } from '../paciente/data/mockData';
+
+const PatientDashboard = () => {
+  const [activeSection, setActiveSection] = useState('dashboard');
+  const [selectedNotification, setSelectedNotification] = useState(null);
+
+  return (
+    <div className="min-h-screen bg-gray-100">
+      <Header patientData={mockData.patient} />
+      
+      <div className="max-w-7xl mx-auto px-4 py-6">
+        <div className="flex flex-col md:flex-row gap-6">
+          <Sidebar 
+            activeSection={activeSection} 
+            setActiveSection={setActiveSection}
+            notifications={mockData.notifications}
+          />
+          
+          <main className="flex-1">
+            {activeSection === 'dashboard' && (
+              <Dashboard 
+                patientData={mockData.patient}
+                notifications={mockData.notifications}
+                appointments={mockData.appointments}
+                treatments={mockData.treatments}
+              />
+            )}
+            {activeSection === 'profile' && (
+              <Profile patientData={mockData.patient} />
+            )}
+            {activeSection === 'history' && (
+              <History nutritionHistory={mockData.nutritionHistory} />
+            )}
+            {activeSection === 'appointments' && (
+              <Appointments appointments={mockData.appointments} />
+            )}
+            {activeSection === 'notifications' && (
+              <Notifications 
+                notifications={mockData.notifications}
+                setSelectedNotification={setSelectedNotification}
+              />
+            )}
+            {activeSection === 'location' && (
+              <Location patientData={mockData.patient} />
+            )}
+            {activeSection === 'education' && (
+              <Education educationalMaterials={mockData.educationalMaterials} />
+            )}
+          </main>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default PatientDashboard;
