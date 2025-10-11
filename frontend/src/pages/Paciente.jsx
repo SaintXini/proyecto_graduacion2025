@@ -1,15 +1,15 @@
 // pages/Paciente.jsx
 import React, { useState } from 'react';
-import Header from '../paciente/Header';
-import Sidebar from '../paciente/Sidebar';
-import Dashboard from '../paciente/Dashboard';
-import Profile from '../paciente/Profile';
-import History from '../paciente/History';
-import Appointments from '../paciente/Appointments';
-import Notifications from '../paciente/Notifications';
-import Location from '../paciente/Location';
-import Education from '../paciente/Education';
-import { mockData } from '../paciente/data/mockData';
+import Header from '../components/paciente/Header';
+import Sidebar from '../components/paciente/Sidebar';
+import Dashboard from '../components/paciente/Dashboard';
+import Profile from '../components/paciente/Profile';
+import History from '../components/paciente/History';
+import Appointments from '../components/paciente/Appointments';
+import Notifications from '../components/paciente/Notifications';
+import Location from '../components/paciente/Location';
+import Education from '../components/paciente/Education';
+import { mockData } from '../components/paciente/data/mockData';
 
 const PatientDashboard = () => {
   const [activeSection, setActiveSection] = useState('dashboard');

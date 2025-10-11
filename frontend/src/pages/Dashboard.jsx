@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
-import { AppContext } from '../medical/context/AppContext';
-import { initialPatients, initialVisits, initialAlerts } from '../medical/data/initialData';
-import { Sidebar } from '../medical/Sidebar';
-import { Header } from '../medical/Header';
-import { DashboardView } from '../medical/DashboardView';
-import { PatientsView } from '../medical/PatientsView';
+import { AppContext } from '../components/medical/context/AppContext';
+import { initialPatients, initialVisits, initialAlerts } from '../components/medical/data/initialData';
+import { Sidebar } from '../components/medical/Sidebar';
+import { Header } from '../components/medical/Header';
+import { DashboardView } from '../components/medical/DashboardView';
+import { PatientsView } from '../components/medical/PatientsView';
 
 const DoctorDashboard = () => {
   const [currentView, setCurrentView] = useState('dashboard');

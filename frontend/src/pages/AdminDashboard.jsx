@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
-import { Header } from '../adminpage/Header';
-import { Navigation } from '../adminpage/Navigation';
-import { Footer } from '../adminpage/Footer';
-import { DashboardTab } from '../adminpage/DashboardTab';
-import { UsersTab } from '../adminpage/UsersTab';
-import { CommunitiesTab } from '../adminpage/CommunitiesTab';
-import { NutritionTab } from '../adminpage/NutritionTab';
-import { TraceabilityTab } from '../adminpage/TraceabilityTab';
+import { Header } from '../components/adminpage/Header';
+import { Navigation } from '../components/adminpage/Navigation';
+import { Footer } from '../components/adminpage/Footer';
+import { DashboardTab } from '../components/adminpage/DashboardTab';
+import { UsersTab } from '../components/adminpage/UsersTab';
+import { CommunitiesTab } from '../components/adminpage/CommunitiesTab';
+import { NutritionTab } from '../components/adminpage/NutritionTab';
+import { TraceabilityTab } from '../components/adminpage/TraceabilityTab';
 import {
   initialUsers,
   initialCommunities,
@@ -15,8 +15,7 @@ import {
   activityData,
   userActivityData,
   roleDistribution
-} from '../adminpage/data/initalData';
-import { useAuth } from '../../context/AuthContext';
+} from '../components/adminpage/data/initalData';
 
 const AdminDashboard = () => {
   const [activeTab, setActiveTab] = useState('dashboard');

@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
 import { Bell, Activity } from 'lucide-react';
-import MenuNavegacion from '../autoridades/MenuNavegacion';
-import DashboardEstrategico from '../autoridades/DashboardEstrategico';
-import GestionGeografica from '../autoridades/GestionGeografica';
-import ReportesEstadisticas from '../autoridades/ReportesEstadisticas';
-import AlertasCoordinacion from '../autoridades/AlertasCoordinacion';
+import MenuNavegacion from '../components/autoridades/MenuNavegacion';
+import DashboardEstrategico from '../components/autoridades/DashboardEstrategico';
+import GestionGeografica from '../components/autoridades/GestionGeografica';
+import ReportesEstadisticas from '../components/autoridades/ReportesEstadisticas';
+import AlertasCoordinacion from '../components/autoridades/AlertasCoordinacion';
 
-const AuthorityDashboard = () => {
+const Muni = () => {
   const [seccionActiva, setSeccionActiva] = useState('dashboard');
   const [alertasActivas, setAlertasActivas] = useState(3);
 
@@ -58,4 +58,4 @@ const AuthorityDashboard = () => {
   );
 };
 
-export default AuthorityDashboard;
+export default Muni;

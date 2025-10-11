@@ -1,73 +1,30 @@
-import React from 'react';
-import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
-import { AuthProvider } from './context/AuthContext';
-import { ProtectedRoute } from './components/ProtectedRoute';
+import React, { useState } from 'react';
+import Muni from './pages/muni';
+import Inicio from './pages/inicio';
+import PatientDashboard from './pages/Paciente'; // import correcto
+import Dashboard from './pages/Dashboard';
+import AdminDashboard from './pages/AdminDashboard';
 
-// Páginas públicas
-import Inicio from './components/pages/inicio';
-import Unauthorized from './components/pages/Unauthorized';
+export default function App() {
+  const [pagina, setPagina] = useState('inicio'); // controla qué página mostrar
 
-// Dashboards por rol
-import AdminDashboard from './components/pages/AdminDashboard';
-import AuthorityDashboard from './components/pages/Muni';
-import DoctorDashboard from './components/pages/Dashboard';
-import PatientDashboard from './components/pages/Paciente';
-
-function App() {
   return (
-    <Router>
-      <AuthProvider>
-        <Routes>
-          {/* Ruta pública - Inicio/Login */}
-          <Route path="/" element={<Inicio />} />
-          <Route path="/unauthorized" element={<Unauthorized />} />
+    <div>
+      <nav>
+        <button onClick={() => setPagina('inicio')}>Inicio</button>
+        <button onClick={() => setPagina('admin')}>Administrador</button>
+        <button onClick={() => setPagina('muni')}>Municipalidad</button>
+        <button onClick={() => setPagina('paciente')}>Paciente</button>
+        <button onClick={() => setPagina('medico')}>medico</button>
 
-          {/* Rutas protegidas para ADMIN */}
-          <Route
-            path="/admin/*"
-            element={
-              <ProtectedRoute allowedRoles={['admin']}>
-                <AdminDashboard />
-              </ProtectedRoute>
-            }
-          />
+      </nav>
 
-          {/* Rutas protegidas para AUTORIDADES */}
-          <Route
-            path="/authority/*"
-            element={
-              <ProtectedRoute allowedRoles={['authority']}>
-                <AuthorityDashboard />
-              </ProtectedRoute>
-            }
-          />
+      {pagina === 'inicio' && <Inicio />}
+      {pagina === 'admin' && <AdminDashboard />}
+      {pagina === 'muni' && <Muni />}
+      {pagina === 'paciente' && <PatientDashboard />}
+      {pagina === 'medico' && <Dashboard />}
 
-          {/* Rutas protegidas para MÉDICOS */}
-          <Route
-            path="/doctor/*"
-            element={
-              <ProtectedRoute allowedRoles={['doctor']}>
-                <DoctorDashboard />
-              </ProtectedRoute>
-            }
-          />
-
-          {/* Rutas protegidas para PACIENTES */}
-          <Route
-            path="/patient/*"
-            element={
-              <ProtectedRoute allowedRoles={['patient']}>
-                <PatientDashboard />
-              </ProtectedRoute>
-            }
-          />
-
-          {/* Redirección para rutas no encontradas */}
-          <Route path="*" element={<Navigate to="/" replace />} />
-        </Routes>
-      </AuthProvider>
-    </Router>
+    </div>
   );
 }
-
-export default App;
