@@ -30,6 +30,7 @@ cors = CORS(
                 "Access-Control-Allow-Credentials"
             ],
             "supports_credentials": True,
+            "expose_headers": ["Content-Type", "Authorization"],
             "max_age": 3600
         }
     }

@@ -1,44 +1,44 @@
 import React, { useContext } from 'react';
-import { Users, AlertTriangle, Calendar, Bell } from 'lucide-react';
+import { Users, FileText, Calendar, Bell } from 'lucide-react';
 import { AppContext } from './context/AppContext';
 
 export const DashboardStats = () => {
-  const { patients, visits, alerts } = useContext(AppContext);
+  const { patients, medicalRecords, nutritionPlans, alerts, stats } = useContext(AppContext);
 
-  const stats = [
-    { 
-      label: 'Total Pacientes', 
-      value: patients.length, 
-      icon: Users, 
+  const dashboardStats = [
+    {
+      label: 'Total Pacientes',
+      value: patients.length,
+      icon: Users,
       color: 'bg-blue-500',
-      change: '+3 este mes'
+      change: `${patients.filter(p => p.is_active).length} activos`
     },
-    { 
-      label: 'Casos Críticos', 
-      value: patients.filter(p => p.riesgo === 'alto').length, 
-      icon: AlertTriangle, 
-      color: 'bg-red-500',
-      change: 'Requiere atención'
-    },
-    { 
-      label: 'Visitas Pendientes', 
-      value: visits.filter(v => v.estado === 'programada').length, 
-      icon: Calendar, 
+    {
+      label: 'Registros Médicos',
+      value: medicalRecords.length,
+      icon: FileText,
       color: 'bg-green-500',
-      change: 'Esta semana'
+      change: 'Total registros'
     },
-    { 
-      label: 'Alertas Activas', 
-      value: alerts.length, 
-      icon: Bell, 
-      color: 'bg-yellow-500',
-      change: 'Revisar ahora'
+    {
+      label: 'Planes Nutrición',
+      value: nutritionPlans.filter(p => p.status === 'active').length,
+      icon: Calendar,
+      color: 'bg-purple-500',
+      change: 'Activos'
+    },
+    {
+      label: 'Alertas Activas',
+      value: alerts.length,
+      icon: Bell,
+      color: 'bg-red-500',
+      change: 'Requieren atención'
     }
   ];
 
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-      {stats.map((stat, index) => (
+      {dashboardStats.map((stat, index) => (
         <div key={index} className="bg-white rounded-lg shadow p-6">
           <div className="flex items-center justify-between mb-4">
             <div className={`${stat.color} p-3 rounded-lg`}>

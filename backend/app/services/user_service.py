@@ -12,15 +12,13 @@ class UserService:
     def create_user(data):
         """
         Crea un nuevo usuario usando el patrón Factory
-        
         Args:
             data (dict): Datos del usuario (username, email, password, role, etc.)
-        
         Returns:
             tuple: (usuario creado, mensaje de error si existe)
         """
         # Validaciones
-        username = data.get('username')
+        username = data.get('username') or data.get('cui')  # Permitir 'cui' como username
         email = data.get('email')
         password = data.get('password')
         role = data.get('role', 'patient')
@@ -46,14 +44,13 @@ class UserService:
                 username=username,
                 email=email,
                 password=password,
-                first_name=data.get('first_name'),
-                last_name=data.get('last_name'),
-                phone=data.get('phone')
+                first_name=data.get('first_name') or data.get('nombre'),
+                last_name=data.get('last_name') or data.get('apellidos'),
+                phone=data.get('phone') or data.get('telefono')
             )
             
             db.session.add(user)
             db.session.commit()
-            
             return user, None
             
         except ValueError as e:

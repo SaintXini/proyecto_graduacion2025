@@ -5,14 +5,18 @@
     <link rel="icon" type="image/svg+xml" href="/vite.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     
-    <!-- Permitir eval SOLO para desarrollo -->
-    <!-- ESTO ES TEMPORAL - Eliminar en producción -->
-    <meta 
-      http-equiv="Content-Security-Policy" 
-      content="default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; font-src 'self' data:; connect-src 'self' http://localhost:5000 http://127.0.0.1:5000;"
-    />
+    <!-- Content Security Policy -->
+    <meta http-equiv="Content-Security-Policy" content="
+      default-src 'self';
+      script-src 'self' 'unsafe-inline' 'unsafe-eval' blob:;
+      worker-src 'self' blob:;
+      style-src 'self' 'unsafe-inline' https://fonts.googleapis.com;
+      font-src 'self' https://fonts.gstatic.com;
+      img-src 'self' data: https: blob:;
+      connect-src 'self' http://localhost:5000 https://cdnjs.cloudflare.com;
+    ">
     
-    <title>NUTRIGEST - Sistema de Salud Comunitaria</title>
+    <title>Sistema Médico Guatemala</title>
   </head>
   <body>
     <div id="root"></div>

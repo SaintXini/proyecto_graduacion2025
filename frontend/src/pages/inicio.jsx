@@ -1,10 +1,41 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { Users, Heart, Shield, User } from 'lucide-react';
+import { useAuth } from '../context/AuthContext';
 import LoginScreen from '../components/inicio/LoginScreen';
 import HomePage from '../components/inicio/HomePage';
 
-export default function App() {
+export default function Inicio() {
+  const navigate = useNavigate();
+  const location = useLocation();
+  const { user, getDashboardByRole, loading } = useAuth();
   const [showLogin, setShowLogin] = useState(false);
+
+  // Si el usuario ya está autenticado, redirigir a su dashboard
+  useEffect(() => {
+    // Solo redirigir si estamos en la página de inicio "/"
+    if (user && location.pathname === '/') {
+      const dashboard = getDashboardByRole(user.role);
+      navigate(`/${dashboard}`, { replace: true });
+    }
+  }, [user, navigate, getDashboardByRole, location.pathname]);
+
+  // Mostrar loading mientras verifica autenticación
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-600 via-purple-600 to-green-600">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-16 w-16 border-b-4 border-white mx-auto"></div>
+          <p className="mt-4 text-white text-lg">Cargando...</p>
+        </div>
+      </div>
+    );
+  }
+
+  // Si ya está autenticado y estamos en "/", no mostrar nada (el useEffect redirigirá)
+  if (user && location.pathname === '/') {
+    return null;
+  }
 
   const roles = [
     {
@@ -41,15 +72,10 @@ export default function App() {
     }
   ];
 
-  const handleLogin = (role) => {
-    alert(`Bienvenido/a ${roles.find(r => r.id === role)?.name}`);
-  };
-
   return showLogin ? (
-    <LoginScreen 
+    <LoginScreen
       roles={roles}
       onBack={() => setShowLogin(false)}
-      onLogin={handleLogin}
     />
   ) : (
     <HomePage onLoginClick={() => setShowLogin(true)} />

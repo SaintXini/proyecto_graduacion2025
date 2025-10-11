@@ -1,30 +1,74 @@
-import React, { useState } from 'react';
-import Muni from './pages/muni';
-import Inicio from './pages/inicio';
-import PatientDashboard from './pages/Paciente'; // import correcto
-import Dashboard from './pages/Dashboard';
+import React from 'react';
+import { BrowserRouter as Router, Routes, Route, Navigate, Link } from 'react-router-dom';
+import { AuthProvider } from './context/AuthContext';
+import { ProtectedRoute } from './components/ProtectedRoute';
+
+// Páginas
+import Inicio from './pages/Inicio';
 import AdminDashboard from './pages/AdminDashboard';
+import Dashboard from './pages/Dashboard';
+import Muni from './pages/muni';
+import PatientDashboard from './pages/Paciente';
 
 export default function App() {
-  const [pagina, setPagina] = useState('inicio'); // controla qué página mostrar
-
   return (
-    <div>
-      <nav>
-        <button onClick={() => setPagina('inicio')}>Inicio</button>
-        <button onClick={() => setPagina('admin')}>Administrador</button>
-        <button onClick={() => setPagina('muni')}>Municipalidad</button>
-        <button onClick={() => setPagina('paciente')}>Paciente</button>
-        <button onClick={() => setPagina('medico')}>medico</button>
+    <AuthProvider>
+      <Router>
+        {/* 🔧 Navegación de prueba (solo para desarrollo) */}
+        <nav style={{ padding: '10px', backgroundColor: '#eee' }}>
+          <strong>Modo desarrollo:</strong>{" "}
+          <Link to="/">Inicio</Link> |{" "}
+          <Link to="/admin">Admin</Link> |{" "}
+          <Link to="/muni">Muni</Link> |{" "}
+          <Link to="/medico">Médico</Link> |{" "}
+          <Link to="/paciente">Paciente</Link>
+        </nav>
 
-      </nav>
+        <Routes>
+          {/* Ruta pública */}
+          <Route path="/" element={<Inicio />} />
 
-      {pagina === 'inicio' && <Inicio />}
-      {pagina === 'admin' && <AdminDashboard />}
-      {pagina === 'muni' && <Muni />}
-      {pagina === 'paciente' && <PatientDashboard />}
-      {pagina === 'medico' && <Dashboard />}
+          {/* Rutas protegidas */}
+          <Route 
+            path="/admin" 
+            element={
+              <ProtectedRoute allowedRoles={['admin']}>
+                <AdminDashboard />
+              </ProtectedRoute>
+            } 
+          />
 
-    </div>
+          <Route 
+            path="/muni" 
+            element={
+              <ProtectedRoute allowedRoles={['authority']}>
+                <Muni />
+              </ProtectedRoute>
+            } 
+          />
+
+          <Route 
+            path="/medico" 
+            element={
+              <ProtectedRoute allowedRoles={['doctor']}>
+                <Dashboard />
+              </ProtectedRoute>
+            } 
+          />
+
+          <Route 
+            path="/paciente" 
+            element={
+              <ProtectedRoute allowedRoles={['patient']}>
+                <PatientDashboard />
+              </ProtectedRoute>
+            } 
+          />
+
+          {/* Redirección por defecto */}
+          <Route path="*" element={<Navigate to="/" replace />} />
+        </Routes>
+      </Router>
+    </AuthProvider>
   );
 }

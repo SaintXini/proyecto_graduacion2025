@@ -3,6 +3,8 @@ from app import create_app
 
 # Obtener configuración del entorno
 config_name = os.getenv('FLASK_ENV', 'development')
+if config_name not in ['development', 'production', 'testing']:
+    config_name = 'development'
 
 # Crear aplicación
 app = create_app(config_name)

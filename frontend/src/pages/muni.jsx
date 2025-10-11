@@ -5,6 +5,7 @@ import DashboardEstrategico from '../components/autoridades/DashboardEstrategico
 import GestionGeografica from '../components/autoridades/GestionGeografica';
 import ReportesEstadisticas from '../components/autoridades/ReportesEstadisticas';
 import AlertasCoordinacion from '../components/autoridades/AlertasCoordinacion';
+import { LogoutButton } from '../components/LogoutButton';
 
 const Muni = () => {
   const [seccionActiva, setSeccionActiva] = useState('dashboard');
@@ -42,6 +43,7 @@ const Muni = () => {
                 </div>
               </div>
             </div>
+            <LogoutButton />
           </div>
         </div>
       </header>

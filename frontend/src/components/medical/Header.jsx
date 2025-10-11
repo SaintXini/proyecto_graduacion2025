@@ -1,6 +1,9 @@
-import React from 'react';
+import React, { useContext } from 'react';
+import { AppContext } from './context/AppContext';
 
 export const Header = () => {
+  const { currentUser } = useContext(AppContext);
+
   return (
     <div className="mb-8 flex justify-between items-center">
       <div>
@@ -9,11 +12,15 @@ export const Header = () => {
       </div>
       <div className="flex items-center space-x-4">
         <div className="text-right">
-          <p className="text-sm text-gray-600">Dr. Juan Pérez</p>
-          <p className="text-xs text-gray-500">Médico General</p>
+          <p className="text-sm text-gray-600">
+            {currentUser?.first_name} {currentUser?.last_name}
+          </p>
+          <p className="text-xs text-gray-500">
+            {currentUser?.role === 'doctor' ? 'Médico General' : 'Usuario'}
+          </p>
         </div>
         <div className="w-12 h-12 bg-blue-600 rounded-full flex items-center justify-center text-white font-bold">
-          JP
+          {currentUser?.first_name?.[0]}{currentUser?.last_name?.[0]}
         </div>
       </div>
     </div>
