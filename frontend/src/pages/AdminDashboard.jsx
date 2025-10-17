@@ -3,7 +3,6 @@ import { Header } from '../components/adminpage/Header';
 import { Navigation } from '../components/adminpage/Navigation';
 import { Footer } from '../components/adminpage/Footer';
 import { DashboardTab } from '../components/adminpage/DashboardTab';
-import { UsersTab } from '../components/adminpage/UsersTab';
 import { CommunitiesTab } from '../components/adminpage/CommunitiesTab';
 import { NutritionTab } from '../components/adminpage/NutritionTab';
 import { TraceabilityTab } from '../components/adminpage/TraceabilityTab';

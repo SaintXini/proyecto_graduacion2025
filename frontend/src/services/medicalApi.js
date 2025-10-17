@@ -1,89 +1,306 @@
-const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
+// Frontend/src/services/medicalApi.js
+import api from './api';
 
+/**
+ * Servicio para operaciones médicas
+ */
 const medicalApi = {
-  async request(endpoint, options = {}) {
-    const token = localStorage.getItem('token');
-    const headers = {
-      'Content-Type': 'application/json',
-      ...(token && { 'Authorization': `Bearer ${token}` }),
-      ...options.headers
-    };
-
+  // ============================================
+  // PACIENTES
+  // ============================================
+  
+  /**
+   * Obtener todos los pacientes
+   */
+  getPatients: async (filters = {}) => {
     try {
-      const response = await fetch(`${API_URL}${endpoint}`, {
-        ...options,
-        headers
-      });
-
-      if (response.status === 401) {
-        localStorage.removeItem('token');
-        localStorage.removeItem('user');
-        window.location.href = '/';
-        throw new Error('Sesión expirada');
-      }
-
-      const data = await response.json();
+      const params = new URLSearchParams();
+      if (filters.role) params.append('role', 'patient');
+      if (filters.is_active !== undefined) params.append('is_active', filters.is_active);
       
-      if (!response.ok) {
-        throw new Error(data.message || 'Error en la petición');
-      }
-
-      return data;
+      const response = await api.get(`/users?${params.toString()}`);
+      return response.data;
     } catch (error) {
-      console.error('API Error:', error);
+      console.error('Error obteniendo pacientes:', error);
       throw error;
     }
   },
 
-  // Pacientes
-  getPatients: () => medicalApi.request('/users?role=patient'),
-  
-  getPatientById: (id) => medicalApi.request(`/users/${id}`),
-  
-  // Registros médicos
-  getMedicalRecords: (patientId, doctorId) => {
-    let query = '/traceability?';
-    if (patientId) query += `patient_id=${patientId}&`;
-    if (doctorId) query += `doctor_id=${doctorId}&`;
-    return medicalApi.request(query.slice(0, -1));
+  /**
+   * Obtener paciente por ID
+   */
+  getPatientById: async (patientId) => {
+    try {
+      const response = await api.get(`/users/${patientId}`);
+      return response.data;
+    } catch (error) {
+      console.error('Error obteniendo paciente:', error);
+      throw error;
+    }
   },
-  
-  getMedicalRecordById: (id) => medicalApi.request(`/traceability/${id}`),
-  
-  createMedicalRecord: (data) => 
-    medicalApi.request('/traceability', {
-      method: 'POST',
-      body: JSON.stringify(data)
-    }),
 
-  addPrescription: (recordId, data) =>
-    medicalApi.request(`/traceability/${recordId}/prescriptions`, {
-      method: 'POST',
-      body: JSON.stringify(data)
-    }),
+  /**
+   * Crear nuevo paciente
+   */
+  createPatient: async (patientData) => {
+    try {
+      const data = {
+        username: patientData.cui || patientData.username,
+        email: patientData.email,
+        password: patientData.password || 'default123',
+        role: 'patient',
+        first_name: patientData.nombre || patientData.first_name,
+        last_name: patientData.apellidos || patientData.last_name,
+        phone: patientData.telefono || patientData.phone
+      };
+      
+      const response = await api.post('/users', data);
+      return response.data;
+    } catch (error) {
+      console.error('Error creando paciente:', error);
+      throw error;
+    }
+  },
 
-  // Planes de nutrición
-  getNutritionPlans: (patientId) => 
-    medicalApi.request(`/nutrition${patientId ? `?patient_id=${patientId}` : ''}`),
-  
-  getNutritionPlanById: (id) => medicalApi.request(`/nutrition/${id}`),
-  
-  createNutritionPlan: (data) => 
-    medicalApi.request('/nutrition', {
-      method: 'POST',
-      body: JSON.stringify(data)
-    }),
+  /**
+   * Actualizar paciente
+   */
+  updatePatient: async (patientId, patientData) => {
+    try {
+      const response = await api.put(`/users/${patientId}`, patientData);
+      return response.data;
+    } catch (error) {
+      console.error('Error actualizando paciente:', error);
+      throw error;
+    }
+  },
 
-  addMealToPlan: (planId, data) =>
-    medicalApi.request(`/nutrition/${planId}/meals`, {
-      method: 'POST',
-      body: JSON.stringify(data)
-    }),
+  // ============================================
+  // REGISTROS MÉDICOS
+  // ============================================
 
-  // Dashboard stats
-  getDashboardStats: () => medicalApi.request('/dashboard/stats'),
-  
-  getRecentActivity: () => medicalApi.request('/dashboard/recent-activity')
+  /**
+   * Obtener registros médicos
+   */
+  getMedicalRecords: async (patientId = null, doctorId = null) => {
+    try {
+      const params = new URLSearchParams();
+      if (patientId) params.append('patient_id', patientId);
+      if (doctorId) params.append('doctor_id', doctorId);
+      
+      const response = await api.get(`/traceability?${params.toString()}`);
+      return response.data;
+    } catch (error) {
+      console.error('Error obteniendo registros médicos:', error);
+      throw error;
+    }
+  },
+
+  /**
+   * Obtener registro médico por ID
+   */
+  getMedicalRecordById: async (recordId) => {
+    try {
+      const response = await api.get(`/traceability/${recordId}`);
+      return response.data;
+    } catch (error) {
+      console.error('Error obteniendo registro médico:', error);
+      throw error;
+    }
+  },
+
+  /**
+   * Crear registro médico
+   */
+  createMedicalRecord: async (recordData) => {
+    try {
+      const response = await api.post('/traceability', recordData);
+      return response.data;
+    } catch (error) {
+      console.error('Error creando registro médico:', error);
+      throw error;
+    }
+  },
+
+  /**
+   * Añadir prescripción a un registro médico
+   */
+  addPrescription: async (recordId, prescriptionData) => {
+    try {
+      const response = await api.post(`/traceability/${recordId}/prescriptions`, prescriptionData);
+      return response.data;
+    } catch (error) {
+      console.error('Error añadiendo prescripción:', error);
+      throw error;
+    }
+  },
+
+  // ============================================
+  // PLANES DE NUTRICIÓN
+  // ============================================
+
+  /**
+   * Obtener planes de nutrición
+   */
+  getNutritionPlans: async (patientId = null) => {
+    try {
+      const params = new URLSearchParams();
+      if (patientId) params.append('patient_id', patientId);
+      
+      const response = await api.get(`/nutrition?${params.toString()}`);
+      return response.data;
+    } catch (error) {
+      console.error('Error obteniendo planes de nutrición:', error);
+      throw error;
+    }
+  },
+
+  /**
+   * Obtener plan de nutrición por ID
+   */
+  getNutritionPlanById: async (planId) => {
+    try {
+      const response = await api.get(`/nutrition/${planId}`);
+      return response.data;
+    } catch (error) {
+      console.error('Error obteniendo plan de nutrición:', error);
+      throw error;
+    }
+  },
+
+  /**
+   * Crear plan de nutrición
+   */
+  createNutritionPlan: async (planData) => {
+    try {
+      const response = await api.post('/nutrition', planData);
+      return response.data;
+    } catch (error) {
+      console.error('Error creando plan de nutrición:', error);
+      throw error;
+    }
+  },
+
+  /**
+   * Añadir comida a un plan de nutrición
+   */
+  addMealToPlan: async (planId, mealData) => {
+    try {
+      const response = await api.post(`/nutrition/${planId}/meals`, mealData);
+      return response.data;
+    } catch (error) {
+      console.error('Error añadiendo comida:', error);
+      throw error;
+    }
+  },
+
+  // ============================================
+  // DASHBOARD Y ESTADÍSTICAS
+  // ============================================
+
+  /**
+   * Obtener estadísticas del dashboard
+   */
+  getDashboardStats: async () => {
+    try {
+      const response = await api.get('/dashboard/stats');
+      return response.data;
+    } catch (error) {
+      console.error('Error obteniendo estadísticas:', error);
+      return {
+        total_users: 0,
+        active_users: 0,
+        consultations_today: 0,
+        active_alerts: 0
+      };
+    }
+  },
+
+  /**
+   * Obtener actividad mensual
+   */
+  getMonthlyActivity: async () => {
+    try {
+      const response = await api.get('/dashboard/activity');
+      return response.data;
+    } catch (error) {
+      console.error('Error obteniendo actividad mensual:', error);
+      return [];
+    }
+  },
+
+  /**
+   * Obtener distribución de roles
+   */
+  getRoleDistribution: async () => {
+    try {
+      const response = await api.get('/dashboard/roles');
+      return response.data;
+    } catch (error) {
+      console.error('Error obteniendo distribución de roles:', error);
+      return [];
+    }
+  },
+
+  /**
+   * Obtener actividad de usuarios
+   */
+  getUserActivity: async () => {
+    try {
+      const response = await api.get('/dashboard/user-activity');
+      return response.data;
+    } catch (error) {
+      console.error('Error obteniendo actividad de usuarios:', error);
+      return [];
+    }
+  },
+
+  /**
+   * Obtener actividad reciente
+   */
+  getRecentActivity: async () => {
+    try {
+      const response = await api.get('/dashboard/recent-activity');
+      return response.data;
+    } catch (error) {
+      console.error('Error obteniendo actividad reciente:', error);
+      return [];
+    }
+  },
+
+  // ============================================
+  // COMUNIDADES
+  // ============================================
+
+  /**
+   * Obtener todas las comunidades
+   */
+  getCommunities: async (filters = {}) => {
+    try {
+      const params = new URLSearchParams();
+      if (filters.location) params.append('location', filters.location);
+      if (filters.health_center_id) params.append('health_center_id', filters.health_center_id);
+      
+      const response = await api.get(`/communities?${params.toString()}`);
+      return response.data;
+    } catch (error) {
+      console.error('Error obteniendo comunidades:', error);
+      return [];
+    }
+  },
+
+  /**
+   * Obtener comunidad por ID
+   */
+  getCommunityById: async (communityId) => {
+    try {
+      const response = await api.get(`/communities/${communityId}`);
+      return response.data;
+    } catch (error) {
+      console.error('Error obteniendo comunidad:', error);
+      throw error;
+    }
+  }
 };
 
 export default medicalApi;

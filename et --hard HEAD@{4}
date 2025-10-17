@@ -1,0 +1,15 @@
+[33m9bce709[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mintentofuncional[m[33m, [m[1;31morigin/intentofuncional[m[33m)[m HEAD@{0}: checkout: moving from intentofuncional to intentofuncional
+[33m9bce709[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mintentofuncional[m[33m, [m[1;31morigin/intentofuncional[m[33m)[m HEAD@{1}: reset: moving to intentofuncional
+[33m9bce709[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mintentofuncional[m[33m, [m[1;31morigin/intentofuncional[m[33m)[m HEAD@{2}: checkout: moving from disenofinal to intentofuncional
+[33m9bce709[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mintentofuncional[m[33m, [m[1;31morigin/intentofuncional[m[33m)[m HEAD@{3}: checkout: moving from intentofuncional to disenofinal
+[33m9bce709[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mintentofuncional[m[33m, [m[1;31morigin/intentofuncional[m[33m)[m HEAD@{4}: commit: funcional
+[33mb340eac[m[33m ([m[1;31morigin/main[m[33m, [m[1;31morigin/intento[m[33m, [m[1;32mmain[m[33m)[m HEAD@{5}: checkout: moving from main to intentofuncional
+[33mb340eac[m[33m ([m[1;31morigin/main[m[33m, [m[1;31morigin/intento[m[33m, [m[1;32mmain[m[33m)[m HEAD@{6}: reset: moving to intento
+[33mb340eac[m[33m ([m[1;31morigin/main[m[33m, [m[1;31morigin/intento[m[33m, [m[1;32mmain[m[33m)[m HEAD@{7}: pull origin intento: Fast-forward
+[33m5902816[m HEAD@{8}: checkout: moving from intento to main
+[33mb340eac[m[33m ([m[1;31morigin/main[m[33m, [m[1;31morigin/intento[m[33m, [m[1;32mmain[m[33m)[m HEAD@{9}: commit: Agrego nueva funcionalidad
+[33m5902816[m HEAD@{10}: checkout: moving from main to intento
+[33m5902816[m HEAD@{11}: checkout: moving from frontend_conexion to main
+[33m5902816[m HEAD@{12}: checkout: moving from main to frontend_conexion
+[33m5902816[m HEAD@{13}: Branch: renamed refs/heads/master to refs/heads/main
+[33m5902816[m HEAD@{15}: commit (initial): primer commit
