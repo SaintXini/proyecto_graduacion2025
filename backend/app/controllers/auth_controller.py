@@ -6,7 +6,6 @@ from flask import jsonify, request
 from flask_jwt_extended import create_access_token, jwt_required, get_jwt_identity
 from app.services.user_service import UserService
 
-
 class AuthController:
     """Controlador para autenticación y registro"""
     

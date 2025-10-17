@@ -7,7 +7,6 @@ from flask_jwt_extended import jwt_required, get_jwt_identity
 from app.services.user_service import UserService
 from app.utils.decorators import role_required
 
-
 class UserController:
     """Controlador para operaciones de usuarios"""
     
@@ -64,7 +63,7 @@ class UserController:
     
     @staticmethod
     @jwt_required()
-    @role_required('admin')
+    @role_required('admin', 'doctor')
     def create_user():
         """
         Crea un nuevo usuario
@@ -145,5 +144,3 @@ class UserController:
         except Exception as e:
             print(f"Error en delete_user: {str(e)}")
             return jsonify({'message': 'Error al eliminar usuario', 'error': str(e)}), 500
-        
-        

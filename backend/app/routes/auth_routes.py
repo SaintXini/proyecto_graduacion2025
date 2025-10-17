@@ -24,3 +24,4 @@ def get_current_user():
 def verify_token():
     """Verificar si el token es válido"""
     return AuthController.verify_token()
+

@@ -6,7 +6,6 @@ from app.extensions import db
 from app.models.nutrition import NutritionPlan, Meal
 from datetime import datetime
 
-
 class NutritionService:
     """Servicio para operaciones de nutrición"""
     
@@ -101,4 +100,3 @@ class NutritionService:
         except Exception as e:
             db.session.rollback()
             return None, f"Error al añadir comida: {str(e)}"
-

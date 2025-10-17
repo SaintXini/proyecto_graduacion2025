@@ -7,7 +7,6 @@ from flask_jwt_extended import jwt_required, get_jwt_identity
 from app.services.community_service import CommunityService
 from app.utils.decorators import role_required
 
-
 class CommunityController:
     """Controlador para operaciones de comunidades"""
     
@@ -153,3 +152,4 @@ class CommunityController:
         except Exception as e:
             print(f"Error en add_member: {str(e)}")
             return jsonify({'message': 'Error al añadir miembro', 'error': str(e)}), 500
+

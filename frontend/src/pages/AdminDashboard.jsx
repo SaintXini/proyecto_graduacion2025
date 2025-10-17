@@ -3,6 +3,7 @@ import { Header } from '../components/adminpage/Header';
 import { Navigation } from '../components/adminpage/Navigation';
 import { Footer } from '../components/adminpage/Footer';
 import { DashboardTab } from '../components/adminpage/DashboardTab';
+import { UsersTab } from '../components/adminpage/UsersTab';
 import { CommunitiesTab } from '../components/adminpage/CommunitiesTab';
 import { NutritionTab } from '../components/adminpage/NutritionTab';
 import { TraceabilityTab } from '../components/adminpage/TraceabilityTab';
@@ -40,7 +41,6 @@ const AdminDashboard = () => {
     rol: 'doctor'
   });
 
-  // Verificar autenticación antes de cargar datos
   useEffect(() => {
     console.log('🔍 [AdminDashboard] Verificando autenticación...');
     const token = localStorage.getItem('token');
@@ -54,43 +54,39 @@ const AdminDashboard = () => {
     
     console.log('✅ [AdminDashboard] Token disponible, cargando datos...');
     loadInitialData();
-  }, []); // Solo se ejecuta una vez al montar
+  }, []);
 
   const loadInitialData = async () => {
     console.log('📊 [AdminDashboard] Iniciando carga de datos...');
-    
-    // Verificar token nuevamente
     const token = localStorage.getItem('token');
+    
     if (!token) {
       console.error('❌ [AdminDashboard] Token no disponible');
       setError('Sesión no válida');
       navigate('/', { replace: true });
       return;
     }
-    
+
     setLoading(true);
     setError(null);
-    
+
     try {
       console.log('🔑 [AdminDashboard] Token presente:', token.substring(0, 20) + '...');
       
-      // Cargar todos los datos en paralelo con manejo individual de errores
       const results = await Promise.allSettled([
         userService.getAll(),
         communityService.getAll(),
         nutritionService.getAll(),
         traceabilityService.getAll()
       ]);
-      
-      // Procesar resultados
+
       const [usersResult, communitiesResult, nutritionResult, traceabilityResult] = results;
-      
+
       if (usersResult.status === 'fulfilled') {
         setUsers(usersResult.value || []);
         console.log('✅ [AdminDashboard] Usuarios cargados:', usersResult.value?.length);
       } else {
         console.error('❌ [AdminDashboard] Error cargando usuarios:', usersResult.reason);
-        // Si falla cargar usuarios, es probable que sea un problema de autenticación
         if (usersResult.reason?.response?.status === 401) {
           console.error('🔒 [AdminDashboard] Error 401 - Token inválido');
           setError('Sesión expirada. Por favor, inicia sesión nuevamente.');
@@ -101,28 +97,28 @@ const AdminDashboard = () => {
           return;
         }
       }
-      
+
       if (communitiesResult.status === 'fulfilled') {
         setCommunities(communitiesResult.value || []);
         console.log('✅ [AdminDashboard] Comunidades cargadas:', communitiesResult.value?.length);
       } else {
         console.error('❌ [AdminDashboard] Error cargando comunidades:', communitiesResult.reason);
       }
-      
+
       if (nutritionResult.status === 'fulfilled') {
         setNutritionData(nutritionResult.value || []);
         console.log('✅ [AdminDashboard] Datos de nutrición cargados:', nutritionResult.value?.length);
       } else {
         console.error('❌ [AdminDashboard] Error cargando nutrición:', nutritionResult.reason);
       }
-      
+
       if (traceabilityResult.status === 'fulfilled') {
         setTraceability(traceabilityResult.value || []);
         console.log('✅ [AdminDashboard] Trazabilidad cargada:', traceabilityResult.value?.length);
       } else {
         console.error('❌ [AdminDashboard] Error cargando trazabilidad:', traceabilityResult.reason);
       }
-      
+
     } catch (err) {
       console.error('❌ [AdminDashboard] Error general cargando datos:', err);
       setError('Error al cargar los datos del sistema');
@@ -131,24 +127,18 @@ const AdminDashboard = () => {
     }
   };
 
-  // ============================================
-  // FUNCIONES DE GESTIÓN DE USUARIOS
-  // ============================================
   const handleCreateUser = async () => {
-    // Validar campos obligatorios
     if (!newUser.cui || !newUser.nombre || !newUser.apellidos || !newUser.email || !newUser.password) {
       alert('Por favor complete todos los campos obligatorios (CUI, Nombre, Apellidos, Email, Contraseña)');
       return;
     }
 
-    // Validar formato de email
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(newUser.email)) {
       alert('Por favor ingrese un email válido');
       return;
     }
 
-    // Validar longitud de contraseña
     if (newUser.password.length < 6) {
       alert('La contraseña debe tener al menos 6 caracteres');
       return;
@@ -156,31 +146,31 @@ const AdminDashboard = () => {
 
     setLoading(true);
     try {
-      // Mapear el rol del frontend al formato del backend
       const roleMap = {
         'medico': 'doctor',
+        'doctor': 'doctor',
         'autoridad': 'authority',
+        'authority': 'authority',
         'admin': 'admin',
-        'paciente': 'patient'
+        'paciente': 'patient',
+        'patient': 'patient'
       };
 
       const userData = {
-        cui: newUser.cui,
-        nombre: newUser.nombre,
-        apellidos: newUser.apellidos,
+        username: newUser.cui,
         email: newUser.email,
-        telefono: newUser.telefono,
         password: newUser.password,
-        role: roleMap[newUser.rol] || newUser.rol,
-        activo: true
+        role: roleMap[newUser.rol] || 'patient',
+        first_name: newUser.nombre,
+        last_name: newUser.apellidos,
+        phone: newUser.telefono
       };
 
-      const createdUser = await userService.create(userData);
-
-      // Agregar el nuevo usuario a la lista
+      const response = await userService.create(userData);
+      const createdUser = response.user || response;
+      
       setUsers([...users, createdUser]);
-
-      // Limpiar formulario
+      
       setNewUser({
         cui: '',
         nombre: '',
@@ -188,9 +178,9 @@ const AdminDashboard = () => {
         email: '',
         telefono: '',
         password: '',
-        rol: 'medico'
+        rol: 'doctor'
       });
-
+      
       alert('Usuario creado exitosamente');
     } catch (err) {
       console.error('Error creando usuario:', err);
@@ -208,12 +198,11 @@ const AdminDashboard = () => {
     setLoading(true);
     try {
       const updatedUser = await userService.update(userId, {
-        ...user,
-        activo: !user.activo
+        is_active: !user.is_active
       });
-
-      // Actualizar el usuario en la lista
-      setUsers(users.map(u => u.id === userId ? updatedUser : u));
+      
+      const finalUser = updatedUser.user || updatedUser;
+      setUsers(users.map(u => u.id === userId ? finalUser : u));
     } catch (err) {
       console.error('Error actualizando usuario:', err);
       alert('Error al actualizar el estado del usuario');
@@ -230,7 +219,6 @@ const AdminDashboard = () => {
     setLoading(true);
     try {
       await userService.delete(userId);
-      // Remover el usuario de la lista
       setUsers(users.filter(u => u.id !== userId));
       alert('Usuario eliminado exitosamente');
     } catch (err) {
@@ -242,12 +230,11 @@ const AdminDashboard = () => {
   };
 
   const downloadUserActions = (user) => {
-    // Crear un CSV con las acciones del usuario
-    const csvContent = `data:text/csv;charset=utf-8,Usuario,CUI,Email,Rol,Estado\n${user.nombre} ${user.apellidos},${user.cui},${user.email},${user.rol},${user.activo ? 'Activo' : 'Inactivo'}`;
+    const csvContent = `data:text/csv;charset=utf-8,Usuario,CUI,Email,Rol,Estado\n${user.first_name} ${user.last_name},${user.username},${user.email},${user.role},${user.is_active ? 'Activo' : 'Inactivo'}`;
     const encodedUri = encodeURI(csvContent);
     const link = document.createElement('a');
     link.setAttribute('href', encodedUri);
-    link.setAttribute('download', `acciones_${user.cui}.csv`);
+    link.setAttribute('download', `acciones_${user.username}.csv`);
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
@@ -257,16 +244,10 @@ const AdminDashboard = () => {
     setShowPassword(prev => ({ ...prev, [userId]: !prev[userId] }));
   };
 
-  // ============================================
-  // FUNCIONES DE DESCARGA DE GRÁFICAS
-  // ============================================
   const downloadChart = (chartName) => {
     alert(`Funcionalidad de descarga de gráfica: ${chartName}\nEn desarrollo - Se integrará con librería de exportación`);
   };
 
-  // ============================================
-  // DATOS PARA GRÁFICAS (CALCULADOS)
-  // ============================================
   const activityData = [
     { mes: 'Ene', usuarios: 45, consultas: 234 },
     { mes: 'Feb', usuarios: 52, consultas: 289 },
@@ -290,9 +271,6 @@ const AdminDashboard = () => {
     { name: 'Admins', value: users.filter(u => u.role === 'admin').length, color: '#f59e0b' }
   ];
 
-  // ============================================
-  // RENDER
-  // ============================================
   if (loading && users.length === 0) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gray-100">
@@ -306,7 +284,7 @@ const AdminDashboard = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50">
-      <Header userName={user?.nombre || 'Administrador'} />
+      <Header userName={user?.nombre || user?.first_name || 'Administrador'} />
       <Navigation activeTab={activeTab} setActiveTab={setActiveTab} />
       
       <main className="max-w-7xl mx-auto px-6 py-8">
@@ -322,13 +300,22 @@ const AdminDashboard = () => {
             roleDistribution={roleDistribution}
             downloadChart={downloadChart}
             totalUsers={users.length}
-            activeUsers={users.filter(u => u.activo).length}
+            activeUsers={users.filter(u => u.is_active).length}
           />
         )}
 
         {activeTab === 'users' && (
           <UsersTab
-            users={users}
+            users={users.map(u => ({
+              ...u,
+              cui: u.username,
+              nombre: u.first_name,
+              apellidos: u.last_name,
+              telefono: u.phone,
+              rol: u.role,
+              activo: u.is_active,
+              password: '********'
+            }))}
             newUser={newUser}
             setNewUser={setNewUser}
             handleCreateUser={handleCreateUser}
@@ -348,7 +335,10 @@ const AdminDashboard = () => {
         )}
 
         {activeTab === 'nutrition' && (
-          <NutritionTab nutritionData={nutritionData} />
+          <NutritionTab 
+            nutritionData={nutritionData}
+            patients={users.filter(u => u.role === 'patient')}
+          />
         )}
 
         {activeTab === 'traceability' && (

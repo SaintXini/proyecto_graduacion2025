@@ -29,3 +29,4 @@ def create_medical_record():
 def add_prescription(record_id):
     """Añadir una prescripción a un registro médico"""
     return TraceabilityController.add_prescription(record_id)
+

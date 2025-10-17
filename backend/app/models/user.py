@@ -3,11 +3,13 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from datetime import datetime
 
 
+community_members = db.Table('community_members',
+    db.Column('user_id', db.Integer, db.ForeignKey('users.id'), primary_key=True),
+    db.Column('community_id', db.Integer, db.ForeignKey('communities.id'), primary_key=True),
+    db.Column('joined_at', db.DateTime, default=datetime.utcnow)
+)
 class User(db.Model):
-    """
-    Modelo de Usuario
-    Representa a todos los usuarios del sistema con diferentes roles
-    """
+
     __tablename__ = 'users'
     
     id = db.Column(db.Integer, primary_key=True)
@@ -48,6 +50,8 @@ class User(db.Model):
             'last_name': self.last_name,
             'phone': self.phone,
             'is_active': self.is_active,
+            'communities': [c.id for c in self.communities] if self.communities else [],
             'created_at': self.created_at.isoformat() if self.created_at else None,
             'updated_at': self.updated_at.isoformat() if self.updated_at else None
         }
+

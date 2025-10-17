@@ -1,14 +1,12 @@
 from app.extensions import db
 from datetime import datetime
 
-
 # Tabla de asociación many-to-many entre usuarios y comunidades
 user_communities = db.Table('user_communities',
     db.Column('user_id', db.Integer, db.ForeignKey('users.id'), primary_key=True),
     db.Column('community_id', db.Integer, db.ForeignKey('communities.id'), primary_key=True),
     db.Column('joined_at', db.DateTime, default=datetime.utcnow)
 )
-
 
 class Community(db.Model):
     """
@@ -43,7 +41,6 @@ class Community(db.Model):
             'member_count': len(self.members),
             'created_at': self.created_at.isoformat() if self.created_at else None
         }
-
 
 class HealthCenter(db.Model):
     """

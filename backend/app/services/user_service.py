@@ -4,7 +4,6 @@ from app.factories.user_factory import UserFactoryProvider
 from app.utils.validators import validate_email, validate_username, validate_password
 from sqlalchemy.exc import IntegrityError
 
-
 class UserService:
     """Servicio para operaciones de usuarios"""
     

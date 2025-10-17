@@ -1,17 +1,16 @@
 import React, { useState, useEffect } from 'react';
-import { Apple, Eye, Edit, Trash2, Plus, Download, X, Save, UtensilsCrossed } from 'lucide-react';
+import { Apple, Eye, Edit, Trash2, Plus, Download, X, Save, UtensilsCrossed, User } from 'lucide-react';
 import axios from 'axios';
 
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
 
-export const NutritionTab = () => {
+export const NutritionTab = ({ patients = [] }) => {
   const [nutritionPlans, setNutritionPlans] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [showModal, setShowModal] = useState(false);
   const [modalMode, setModalMode] = useState('create');
   const [selectedPlan, setSelectedPlan] = useState(null);
-  
   const [formData, setFormData] = useState({
     patient_id: '',
     title: '',
@@ -45,29 +44,48 @@ export const NutritionTab = () => {
 
   const handleCreate = async () => {
     if (!formData.patient_id || !formData.title) {
-      alert('Por favor complete los campos obligatorios (ID Paciente y Título)');
+      alert('Por favor complete los campos obligatorios (Paciente y Título)');
+      return;
+    }
+
+    const patientId = parseInt(formData.patient_id);
+    if (isNaN(patientId)) {
+      alert('El ID del paciente debe ser un número válido');
       return;
     }
 
     setLoading(true);
     try {
       const token = localStorage.getItem('token');
-      const response = await axios.post(`${API_URL}/nutrition`, 
-        {
-          ...formData,
-          patient_id: parseInt(formData.patient_id),
-          calories_target: parseInt(formData.calories_target) || null
-        },
-        { headers: { Authorization: `Bearer ${token}` } }
-      );
+      
+      const dataToSend = {
+        patient_id: patientId,
+        title: formData.title,
+        description: formData.description || '',
+        calories_target: formData.calories_target ? parseInt(formData.calories_target) : null,
+        start_date: formData.start_date || null,
+        end_date: formData.end_date || null,
+        status: formData.status || 'active'
+      };
 
-      setNutritionPlans([...nutritionPlans, response.data.plan]);
+      console.log('📤 Enviando datos:', dataToSend);
+
+      const response = await axios.post(`${API_URL}/nutrition`, dataToSend, {
+        headers: { Authorization: `Bearer ${token}` }
+      });
+
+      console.log('✅ Respuesta:', response.data);
+
+      const newPlan = response.data.plan || response.data;
+      setNutritionPlans([...nutritionPlans, newPlan]);
       setShowModal(false);
       resetForm();
       alert('Plan de nutrición creado exitosamente');
     } catch (err) {
-      console.error('Error creando plan:', err);
-      alert(err.response?.data?.message || 'Error al crear el plan de nutrición');
+      console.error('❌ Error completo:', err);
+      console.error('Respuesta del servidor:', err.response?.data);
+      const errorMsg = err.response?.data?.message || 'Error al crear el plan de nutrición';
+      alert(errorMsg);
     } finally {
       setLoading(false);
     }
@@ -92,8 +110,9 @@ export const NutritionTab = () => {
         { headers: { Authorization: `Bearer ${token}` } }
       );
 
+      const updatedPlan = response.data.plan || response.data;
       setNutritionPlans(nutritionPlans.map(plan => 
-        plan.id === selectedPlan.id ? response.data.plan : plan
+        plan.id === selectedPlan.id ? updatedPlan : plan
       ));
       setShowModal(false);
       resetForm();
@@ -117,7 +136,6 @@ export const NutritionTab = () => {
       await axios.delete(`${API_URL}/nutrition/${planId}`, {
         headers: { Authorization: `Bearer ${token}` }
       });
-
       setNutritionPlans(nutritionPlans.filter(plan => plan.id !== planId));
       alert('Plan de nutrición eliminado exitosamente');
     } catch (err) {
@@ -131,7 +149,6 @@ export const NutritionTab = () => {
   const openModal = (mode, plan = null) => {
     setModalMode(mode);
     setSelectedPlan(plan);
-    
     if (plan && (mode === 'edit' || mode === 'view')) {
       setFormData({
         patient_id: plan.patient_id?.toString() || '',
@@ -145,7 +162,6 @@ export const NutritionTab = () => {
     } else {
       resetForm();
     }
-    
     setShowModal(true);
   };
 
@@ -182,15 +198,12 @@ export const NutritionTab = () => {
       const blob = new Blob(['\ufeff' + csvContent], { type: 'text/csv;charset=utf-8;' });
       const link = document.createElement('a');
       const url = URL.createObjectURL(blob);
-      
       link.setAttribute('href', url);
       link.setAttribute('download', `planes_nutricion_${new Date().toISOString().split('T')[0]}.csv`);
       link.style.visibility = 'hidden';
-      
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);
-      
       alert('Planes de nutrición descargados exitosamente');
     } catch (err) {
       console.error('Error descargando CSV:', err);
@@ -214,6 +227,11 @@ export const NutritionTab = () => {
       'inactive': 'Inactivo'
     };
     return labels[status] || status;
+  };
+
+  const getPatientName = (patientId) => {
+    const patient = patients.find(p => p.id === patientId);
+    return patient ? `${patient.first_name} ${patient.last_name}` : `ID: ${patientId}`;
   };
 
   if (loading && nutritionPlans.length === 0) {
@@ -283,19 +301,25 @@ export const NutritionTab = () => {
                 <tr>
                   <th className="px-4 py-3 text-left text-sm font-semibold text-gray-700">ID</th>
                   <th className="px-4 py-3 text-left text-sm font-semibold text-gray-700">Título</th>
-                  <th className="px-4 py-3 text-left text-sm font-semibold text-gray-700">ID Paciente</th>
+                  <th className="px-4 py-3 text-left text-sm font-semibold text-gray-700">Paciente</th>
                   <th className="px-4 py-3 text-left text-sm font-semibold text-gray-700">Calorías Objetivo</th>
                   <th className="px-4 py-3 text-left text-sm font-semibold text-gray-700">Fecha Inicio</th>
                   <th className="px-4 py-3 text-left text-sm font-semibold text-gray-700">Fecha Fin</th>
                   <th className="px-4 py-3 text-left text-sm font-semibold text-gray-700">Estado</th>
                   <th className="px-4 py-3 text-left text-sm font-semibold text-gray-700">Acciones</th>
                 </tr>
-              </thead><tbody className="divide-y divide-gray-200">
+              </thead>
+              <tbody className="divide-y divide-gray-200">
                 {nutritionPlans.map((plan) => (
                   <tr key={plan.id} className="hover:bg-gray-50 transition">
                     <td className="px-4 py-3 text-sm text-gray-700">{plan.id}</td>
                     <td className="px-4 py-3 text-sm text-gray-700 font-medium">{plan.title}</td>
-                    <td className="px-4 py-3 text-sm text-gray-700">{plan.patient_id}</td>
+                    <td className="px-4 py-3 text-sm text-gray-700">
+                      <div className="flex items-center space-x-2">
+                        <User className="w-4 h-4 text-blue-600" />
+                        <span>{getPatientName(plan.patient_id)}</span>
+                      </div>
+                    </td>
                     <td className="px-4 py-3 text-sm text-gray-700">
                       {plan.calories_target ? `${plan.calories_target} kcal` : 'N/A'}
                     </td>
@@ -369,17 +393,35 @@ export const NutritionTab = () => {
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">
-                    ID del Paciente *
+                    Paciente *
                   </label>
-                  <input
-                    type="number"
-                    value={formData.patient_id}
-                    onChange={(e) => setFormData({ ...formData, patient_id: e.target.value })}
-                    disabled={modalMode === 'view'}
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent disabled:bg-gray-100"
-                    placeholder="Ej: 1"
-                    min="1"
-                  />
+                  {modalMode === 'view' ? (
+                    <input
+                      type="text"
+                      value={getPatientName(formData.patient_id)}
+                      disabled
+                      className="w-full px-4 py-2 border border-gray-300 rounded-lg bg-gray-100"
+                    />
+                  ) : (
+                    <select
+                      value={formData.patient_id}
+                      onChange={(e) => setFormData({ ...formData, patient_id: e.target.value })}
+                      disabled={modalMode === 'view'}
+                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent disabled:bg-gray-100"
+                    >
+                      <option value="">Seleccione un paciente</option>
+                      {patients.map(patient => (
+                        <option key={patient.id} value={patient.id}>
+                          ID: {patient.id} - {patient.first_name} {patient.last_name} ({patient.email})
+                        </option>
+                      ))}
+                    </select>
+                  )}
+                  {patients.length === 0 && modalMode !== 'view' && (
+                    <p className="text-xs text-orange-600 mt-1">
+                      No hay pacientes registrados. Cree pacientes primero.
+                    </p>
+                  )}
                 </div>
 
                 <div>

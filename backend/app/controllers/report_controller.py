@@ -3,7 +3,6 @@ from flask_jwt_extended import jwt_required, get_jwt_identity
 from app.services.report_service import ReportService
 from app.utils.decorators import role_required
 
-
 class ReportController:
     """Controlador para operaciones de reportes"""
     

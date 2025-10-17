@@ -2,7 +2,6 @@ from app.extensions import db
 from app.models.community import Community, HealthCenter
 from sqlalchemy.exc import IntegrityError
 
-
 class CommunityService:
     """Servicio para operaciones de comunidades"""
     
@@ -130,4 +129,3 @@ class CommunityService:
         except Exception as e:
             db.session.rollback()
             return False, f"Error al añadir miembro: {str(e)}"
-

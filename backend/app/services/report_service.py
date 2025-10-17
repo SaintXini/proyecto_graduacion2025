@@ -7,7 +7,6 @@ from app.models.traceability import MedicalRecord
 from datetime import datetime
 from sqlalchemy import func
 
-
 class ReportService:
     """Servicio para generación de reportes y estadísticas"""
     

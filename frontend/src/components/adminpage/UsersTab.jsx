@@ -16,7 +16,7 @@ export const UsersTab = ({
   downloadChart,
   loading
 }) => {
-  // Mapeo de roles para mostrar
+  
   const getRoleLabel = (role) => {
     const roleLabels = {
       'doctor': 'Médico',
@@ -29,7 +29,6 @@ export const UsersTab = ({
     return roleLabels[role] || role;
   };
 
-  // Color del badge según el rol
   const getRoleColor = (role) => {
     const colors = {
       'admin': 'bg-pink-100 text-pink-700',
@@ -50,7 +49,7 @@ export const UsersTab = ({
           <UserPlus className="w-6 h-6 text-blue-600" />
           <span>Crear Nuevo Usuario</span>
         </h3>
-
+        
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
           <input
             type="text"
@@ -112,10 +111,10 @@ export const UsersTab = ({
             className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
             disabled={loading}
           >
-            <option value="medico">Médico</option>
-            <option value="autoridad">Autoridad</option>
+            <option value="doctor">Médico</option>
+            <option value="authority">Autoridad</option>
             <option value="admin">Administrador</option>
-            <option value="paciente">Paciente</option>
+            <option value="patient">Paciente</option>
           </select>
           
           <button
@@ -127,7 +126,7 @@ export const UsersTab = ({
             <span>{loading ? 'Creando...' : 'Crear Usuario'}</span>
           </button>
         </div>
-
+        
         <p className="text-xs text-gray-500 mt-2">
           * Campos obligatorios. La contraseña debe tener al menos 6 caracteres.
         </p>
@@ -139,7 +138,7 @@ export const UsersTab = ({
           <h3 className="text-lg font-bold text-gray-800">Lista de Usuarios</h3>
           <span className="text-sm text-gray-600">Total: {users.length} usuarios</span>
         </div>
-
+        
         <div className="overflow-x-auto">
           <table className="w-full">
             <thead className="bg-gray-50 border-b-2 border-gray-200">
@@ -165,11 +164,15 @@ export const UsersTab = ({
                 users.map((user) => (
                   <tr key={user.id} className="hover:bg-gray-50 transition">
                     <td className="px-4 py-3 text-sm text-gray-700">{user.cui}</td>
+                    
                     <td className="px-4 py-3 text-sm text-gray-700 font-medium">
                       {user.nombre} {user.apellidos}
                     </td>
+                    
                     <td className="px-4 py-3 text-sm text-gray-700">{user.email}</td>
+                    
                     <td className="px-4 py-3 text-sm text-gray-700">{user.telefono || 'N/A'}</td>
+                    
                     <td className="px-4 py-3 text-sm">
                       <div className="flex items-center space-x-2">
                         <span className="text-gray-700">
@@ -188,11 +191,13 @@ export const UsersTab = ({
                         </button>
                       </div>
                     </td>
+                    
                     <td className="px-4 py-3">
-                      <span className={`px-3 py-1 rounded-full text-xs font-medium ${getRoleColor(user.role || user.rol)}`}>
-                        {getRoleLabel(user.role || user.rol)}
+                      <span className={`px-3 py-1 rounded-full text-xs font-medium ${getRoleColor(user.rol)}`}>
+                        {getRoleLabel(user.rol)}
                       </span>
                     </td>
+                    
                     <td className="px-4 py-3">
                       <button
                         onClick={() => toggleUserStatus(user.id)}
@@ -211,6 +216,7 @@ export const UsersTab = ({
                         <span>{user.activo ? 'Activo' : 'Inactivo'}</span>
                       </button>
                     </td>
+                    
                     <td className="px-4 py-3">
                       <div className="flex items-center space-x-2">
                         <button
@@ -220,6 +226,7 @@ export const UsersTab = ({
                         >
                           <Download className="w-4 h-4" />
                         </button>
+                        
                         <button
                           onClick={() => alert(`Funcionalidad de edición en desarrollo para: ${user.nombre}`)}
                           className="p-2 bg-green-100 text-green-600 rounded-lg hover:bg-green-200 transition"
@@ -227,6 +234,7 @@ export const UsersTab = ({
                         >
                           <Edit className="w-4 h-4" />
                         </button>
+                        
                         <button
                           onClick={() => handleDeleteUser(user.id)}
                           disabled={loading}

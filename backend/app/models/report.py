@@ -1,7 +1,6 @@
 from app.extensions import db
 from datetime import datetime
 
-
 class Report(db.Model):
     """
     Reportes generados por el sistema
@@ -36,4 +35,3 @@ class Report(db.Model):
             'period_start': self.period_start.isoformat() if self.period_start else None,
             'period_end': self.period_end.isoformat() if self.period_end else None
         }
-

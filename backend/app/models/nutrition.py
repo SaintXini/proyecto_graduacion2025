@@ -1,7 +1,6 @@
 from app.extensions import db
 from datetime import datetime
 
-
 class NutritionPlan(db.Model):
     """
     Plan de Nutrición asignado a pacientes
@@ -36,7 +35,6 @@ class NutritionPlan(db.Model):
             'meals': [meal.to_dict() for meal in self.meals],
             'created_at': self.created_at.isoformat() if self.created_at else None
         }
-
 
 class Meal(db.Model):
     """

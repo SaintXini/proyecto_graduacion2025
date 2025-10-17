@@ -7,7 +7,6 @@ from flask_jwt_extended import jwt_required, get_jwt_identity
 from app.services.nutrition_service import NutritionService
 from app.utils.decorators import role_required
 
-
 class NutritionController:
     """Controlador para operaciones de nutrición"""
     

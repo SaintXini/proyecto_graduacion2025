@@ -1,7 +1,6 @@
 from app.extensions import db
 from datetime import datetime
 
-
 class MedicalRecord(db.Model):
     """
     Historial médico de pacientes
@@ -37,7 +36,6 @@ class MedicalRecord(db.Model):
             'created_at': self.created_at.isoformat() if self.created_at else None
         }
 
-
 class Prescription(db.Model):
     """
     Prescripciones médicas
@@ -65,4 +63,3 @@ class Prescription(db.Model):
             'duration': self.duration,
             'instructions': self.instructions
         }
-

@@ -1,7 +1,3 @@
-# Backend/app/controllers/patient_controller.py
-"""
-Controlador para operaciones específicas de pacientes
-"""
 from flask import jsonify, request
 from flask_jwt_extended import jwt_required, get_jwt_identity
 from app.services.user_service import UserService
