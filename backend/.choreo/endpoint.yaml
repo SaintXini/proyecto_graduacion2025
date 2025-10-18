@@ -1,0 +1,8 @@
+version: 0.1
+
+endpoint:
+  - nmae: "REST API"
+    port: 8000
+    type: REST
+    netWorkVisibility: Public
+    context: /
