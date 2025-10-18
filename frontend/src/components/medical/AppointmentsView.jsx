@@ -56,25 +56,43 @@ export const AppointmentsView = () => {
     }
   }, [selectedDate, newAppointment.doctor_id]);
 
-  const loadAvailableSlots = async () => {
-    try {
-      setLoadingSlots(true);
-      console.log('🔵 Cargando slots disponibles...');
+ const loadAvailableSlots = async () => {
+  try {
+    setLoadingSlots(true);
+    console.log('📅 Cargando slots disponibles...');
+    
+    // SOLUCIÓN TEMPORAL: Generar slots en el frontend
+    const slots = generateTimeSlots(selectedDate);
+    setAvailableSlots(slots);
+    console.log('✅ Slots generados:', slots.length);
+  } catch (error) {
+    console.error('❌ Error cargando slots:', error);
+    setAvailableSlots([]);
+  } finally {
+    setLoadingSlots(false);
+  }
+};
+
+// Agregar esta función antes del return
+const generateTimeSlots = (date) => {
+  const slots = [];
+  const baseDate = new Date(date);
+  
+  // Horario de 8:00 AM a 5:00 PM
+  for (let hour = 8; hour < 17; hour++) {
+    for (let minute = 0; minute < 60; minute += 30) {
+      const slotDate = new Date(baseDate);
+      slotDate.setHours(hour, minute, 0, 0);
       
-      const response = await medicalApiService.getDoctorAvailability(
-        newAppointment.doctor_id,
-        selectedDate
-      );
-      
-      setAvailableSlots(response.available_slots || []);
-      console.log('✅ Slots disponibles:', response.available_slots?.length);
-    } catch (error) {
-      console.error('❌ Error cargando slots:', error);
-      setAvailableSlots([]);
-    } finally {
-      setLoadingSlots(false);
+      // Solo agregar slots futuros
+      if (slotDate > new Date()) {
+        slots.push(slotDate.toISOString());
+      }
     }
-  };
+  }
+  
+  return slots;
+};
 
   const handleCreateAppointment = async (e) => {
     e.preventDefault();

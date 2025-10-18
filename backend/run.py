@@ -1,5 +1,7 @@
 import os
 from app import create_app
+from flask_cors import CORS
+
 
 # Obtener configuración del entorno
 config_name = os.getenv('FLASK_ENV', 'development')
@@ -16,3 +18,12 @@ if __name__ == '__main__':
         port=5000,
         debug=app.config['DEBUG']
     )
+
+CORS(app, resources={
+    r"/api/*": {
+        "origins": ["http://localhost:5173", "http://localhost:3000"],
+        "methods": ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+        "allow_headers": ["Content-Type", "Authorization"],
+        "supports_credentials": True
+    }
+})

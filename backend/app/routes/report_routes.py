@@ -1,3 +1,4 @@
+#
 from flask import Blueprint
 from flask_jwt_extended import jwt_required  # ✅ IMPORTAR
 from app.controllers.report_controller import ReportController

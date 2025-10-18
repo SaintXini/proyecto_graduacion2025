@@ -354,27 +354,33 @@ const medicalApiService = {
 /**
  * Obtener todas las citas médicas
  */
+// ============================================
+// CITAS MÉDICAS (APPOINTMENTS)
+// ============================================
+
+/**
+ * Obtener todas las citas
+ */
 getAppointments: async (filters = {}) => {
   try {
-    console.log('🔵 Obteniendo citas médicas...');
-    
+    console.log('🗓️ Obteniendo citas médicas...');
     const params = new URLSearchParams();
+    
     if (filters.patient_id) params.append('patient_id', filters.patient_id);
     if (filters.doctor_id) params.append('doctor_id', filters.doctor_id);
     if (filters.status) params.append('status', filters.status);
-    if (filters.appointment_type) params.append('appointment_type', filters.appointment_type);
-    if (filters.date_from) params.append('date_from', filters.date_from);
-    if (filters.date_to) params.append('date_to', filters.date_to);
+    if (filters.date) params.append('date', filters.date);
     
     const url = params.toString() ? `/appointments?${params.toString()}` : '/appointments';
-    console.log('🔵 URL de petición:', url);
+    console.log('📡 URL de petición:', url);
     
     const response = await api.get(url);
     console.log('✅ Citas obtenidas:', response.data.length);
-    
     return response.data;
   } catch (error) {
     console.error('❌ Error obteniendo citas:', error);
+    console.error('   Status:', error.response?.status);
+    console.error('   Mensaje:', error.response?.data?.message);
     return [];
   }
 },
@@ -384,7 +390,7 @@ getAppointments: async (filters = {}) => {
  */
 getAppointmentById: async (appointmentId) => {
   try {
-    console.log('🔵 Obteniendo cita ID:', appointmentId);
+    console.log('🗓️ Obteniendo cita ID:', appointmentId);
     const response = await api.get(`/appointments/${appointmentId}`);
     return response.data;
   } catch (error) {
@@ -394,18 +400,18 @@ getAppointmentById: async (appointmentId) => {
 },
 
 /**
- * Crear nueva cita médica
+ * Crear nueva cita
  */
 createAppointment: async (appointmentData) => {
   try {
-    console.log('🔵 Creando cita:', appointmentData);
-    
+    console.log('📝 Creando cita:', appointmentData);
     const response = await api.post('/appointments', appointmentData);
-    console.log('✅ Cita creada');
-    
-    return response.data.appointment || response.data;
+    console.log('✅ Cita creada exitosamente');
+    return response.data;
   } catch (error) {
     console.error('❌ Error creando cita:', error);
+    console.error('   Status:', error.response?.status);
+    console.error('   Mensaje:', error.response?.data?.message);
     throw error;
   }
 },
@@ -415,12 +421,10 @@ createAppointment: async (appointmentData) => {
  */
 updateAppointment: async (appointmentId, appointmentData) => {
   try {
-    console.log('🔵 Actualizando cita:', appointmentId);
-    
+    console.log('📝 Actualizando cita:', appointmentId);
     const response = await api.put(`/appointments/${appointmentId}`, appointmentData);
     console.log('✅ Cita actualizada');
-    
-    return response.data.appointment || response.data;
+    return response.data;
   } catch (error) {
     console.error('❌ Error actualizando cita:', error);
     throw error;
@@ -430,15 +434,11 @@ updateAppointment: async (appointmentId, appointmentData) => {
 /**
  * Cancelar cita
  */
-cancelAppointment: async (appointmentId, reason = null) => {
+cancelAppointment: async (appointmentId, cancelData = {}) => {
   try {
-    console.log('🔵 Cancelando cita:', appointmentId);
-    
-    const response = await api.delete(`/appointments/${appointmentId}`, {
-      data: reason ? { reason } : {}
-    });
+    console.log('🚫 Cancelando cita:', appointmentId);
+    const response = await api.post(`/appointments/${appointmentId}/cancel`, cancelData);
     console.log('✅ Cita cancelada');
-    
     return response.data;
   } catch (error) {
     console.error('❌ Error cancelando cita:', error);
@@ -447,21 +447,18 @@ cancelAppointment: async (appointmentId, reason = null) => {
 },
 
 /**
- * Obtener disponibilidad de un doctor
+ * Obtener disponibilidad del doctor
  */
 getDoctorAvailability: async (doctorId, date) => {
   try {
-    console.log('🔵 Obteniendo disponibilidad del doctor:', doctorId, 'para', date);
-    
-    const response = await api.get(`/appointments/doctors/${doctorId}/availability?date=${date}`);
-    console.log('✅ Disponibilidad obtenida:', response.data.available_slots?.length, 'slots');
-    
+    console.log('📅 Obteniendo disponibilidad del doctor:', doctorId, 'para fecha:', date);
+    const response = await api.get(`/appointments/availability/${doctorId}?date=${date}`);
     return response.data;
   } catch (error) {
     console.error('❌ Error obteniendo disponibilidad:', error);
     return { available_slots: [] };
   }
-}
+},
   
 };
 

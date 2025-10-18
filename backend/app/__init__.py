@@ -2,6 +2,7 @@ from flask import Flask, jsonify
 from config import config
 from app.extensions import db, jwt, cors
 from flask_migrate import Migrate
+from flask_cors import CORS
 
 
 def create_app(config_name='development'):
@@ -24,7 +25,18 @@ def create_app(config_name='development'):
     # Inicializar extensiones
     db.init_app(app)
     jwt.init_app(app)
-    cors.init_app(app)
+    
+    # ✅ Configuración CORS correcta
+    CORS(app, resources={
+        r"/api/*": {
+            "origins": ["http://localhost:5173", "http://localhost:5174"],
+            "methods": ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+            "allow_headers": ["Content-Type", "Authorization"],
+            "expose_headers": ["Content-Type", "Authorization"],
+            "supports_credentials": True,
+            "max_age": 3600
+        }
+    })
     
     # Inicializar Flask-Migrate para migraciones de base de datos
     migrate = Migrate(app, db)
@@ -59,6 +71,7 @@ def register_blueprints(app):
     """
     from app.routes.auth_routes import auth_bp
     from app.routes.user_routes import user_bp
+    from app.routes.patient_routes import patient_bp
     from app.routes.community_routes import community_bp
     from app.routes.nutrition_routes import nutrition_bp
     from app.routes.traceability_routes import traceability_bp
@@ -68,6 +81,7 @@ def register_blueprints(app):
     # Registrar blueprints
     app.register_blueprint(auth_bp)
     app.register_blueprint(user_bp)
+    app.register_blueprint(patient_bp)
     app.register_blueprint(community_bp)
     app.register_blueprint(nutrition_bp)
     app.register_blueprint(traceability_bp)
