@@ -1,6 +1,3 @@
-"""
-Controlador para autenticación y registro
-"""
 
 from flask import jsonify, request
 from flask_jwt_extended import create_access_token, jwt_required, get_jwt_identity
@@ -11,11 +8,7 @@ class AuthController:
     
     @staticmethod
     def login():
-        """
-        Inicia sesión de usuario
-        POST /api/login
-        Body: {username, password}
-        """
+
         try:
             data = request.get_json()
             
