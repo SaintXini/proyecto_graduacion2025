@@ -4,7 +4,7 @@ import { AuthProvider } from './context/AuthContext';
 import { ProtectedRoute } from './components/ProtectedRoute';
 
 // Páginas
-import Inicio from './pages/Inicio';
+import Inicio from './pages/inicio';
 import AdminDashboard from './pages/AdminDashboard';
 import Dashboard from './pages/Dashboard';
 import Muni from './pages/muni';
