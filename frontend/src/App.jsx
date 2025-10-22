@@ -14,15 +14,6 @@ export default function App() {
   return (
     <AuthProvider>
       <Router>
-        {/* 🔧 Navegación de prueba (solo para desarrollo) */}
-        <nav style={{ padding: '10px', backgroundColor: '#eee' }}>
-          <strong>Modo desarrollo:</strong>{" "}
-          <Link to="/">Inicio</Link> |{" "}
-          <Link to="/admin">Admin</Link> |{" "}
-          <Link to="/muni">Muni</Link> |{" "}
-          <Link to="/medico">Médico</Link> |{" "}
-          <Link to="/paciente">Paciente</Link>
-        </nav>
 
         <Routes>
           {/* Ruta pública */}

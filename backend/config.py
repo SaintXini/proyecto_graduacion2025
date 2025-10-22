@@ -13,11 +13,11 @@ class Config:
     FLASK_APP = os.getenv('FLASK_APP', 'app.py')
     
     # Configuración de base de datos PostgreSQL
-    DB_HOST = os.getenv('DB_HOST', 'localhost')
+    DB_HOST = os.getenv('DB_HOST', 'dpg-d3s775umcj7s73avqd60-a.oregon-postgres.render.com')
     DB_PORT = os.getenv('DB_PORT', '5432')
-    DB_NAME = os.getenv('DB_NAME', 'salud_comunitaria')
-    DB_USER = os.getenv('DB_USER', 'postgres')
-    DB_PASSWORD = os.getenv('DB_PASSWORD', '2507')
+    DB_NAME = os.getenv('DB_NAME', 'salud_cosaludcomunitariamunitaria')
+    DB_USER = os.getenv('DB_USER', 'saint_x')
+    DB_PASSWORD = os.getenv('DB_PASSWORD', 'CFmL6E619TrB5dMBeQbHc8XkLhwWHYbe')
     
     SQLALCHEMY_DATABASE_URI = f"postgresql://{DB_USER}:{DB_PASSWORD}@{DB_HOST}:{DB_PORT}/{DB_NAME}"
     SQLALCHEMY_TRACK_MODIFICATIONS = False

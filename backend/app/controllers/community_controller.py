@@ -1,7 +1,3 @@
-"""
-Controlador para operaciones de comunidades
-"""
-
 from flask import jsonify, request
 from flask_jwt_extended import jwt_required, get_jwt_identity
 from app.services.community_service import CommunityService

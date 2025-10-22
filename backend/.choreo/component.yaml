@@ -1,8 +1,11 @@
-version: 0.1
-
-endpoint:
-  - nmae: "REST API"
-    port: 8000
+schemaVersion: "1.2"
+endpoints:
+  - name: rest-api-be2
+    displayName: REST API
+    services:
+      basePaht: /
+      port: 8000
     type: REST
-    netWorkVisibility: Public
-    context: /
+    networkVisibilities:
+      - Project
+      - Public
