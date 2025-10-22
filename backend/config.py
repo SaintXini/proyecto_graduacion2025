@@ -15,7 +15,7 @@ class Config:
     # Configuración de base de datos PostgreSQL
     DB_HOST = os.getenv('DB_HOST', 'dpg-d3s775umcj7s73avqd60-a.oregon-postgres.render.com')
     DB_PORT = os.getenv('DB_PORT', '5432')
-    DB_NAME = os.getenv('DB_NAME', 'salud_cosaludcomunitariamunitaria')
+    DB_NAME = os.getenv('DB_NAME', 'saludcomunitaria')
     DB_USER = os.getenv('DB_USER', 'saint_x')
     DB_PASSWORD = os.getenv('DB_PASSWORD', 'CFmL6E619TrB5dMBeQbHc8XkLhwWHYbe')
     
