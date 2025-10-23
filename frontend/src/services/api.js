@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 // URL base de la API - ajustar según entorno
-const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
+const API_URL = import.meta.env.VITE_API_URL || 'https://proyecto-graduacion2025.onrender.com/api';
 
 // Crear instancia de axios con configuración base
 const api = axios.create({
