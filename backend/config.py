@@ -21,11 +21,11 @@ class Config:
         SQLALCHEMY_DATABASE_URI = DATABASE_URL
     else:
         # Si no existe, construye la URI desde variables individuales (para desarrollo local)
-        DB_HOST = os.getenv('DB_HOST', 'dpg-d3sq91buibrs73agi17g-a.oregon-postgres.render.com')
+        DB_HOST = os.getenv('DB_HOST', 'dpg-d8fpm2f40ujc73baakg0-a.oregon-postgres.render.com')
         DB_PORT = os.getenv('DB_PORT', '5432')
-        DB_NAME = os.getenv('DB_NAME', 'saludcomunitaria_pgbm')
+        DB_NAME = os.getenv('DB_NAME', 'saludcomunitaria_r0uo')
         DB_USER = os.getenv('DB_USER', 'martin')
-        DB_PASSWORD = os.getenv('DB_PASSWORD', '8mtS9EfGPNLxcydwo94i5VMcLqcxuyHN')
+        DB_PASSWORD = os.getenv('DB_PASSWORD', 'jdMct6eIQa5DQgsm0yhpkA8IzK2yicNS')
         SQLALCHEMY_DATABASE_URI = f"postgresql://{DB_USER}:{DB_PASSWORD}@{DB_HOST}:{DB_PORT}/{DB_NAME}"
     
     SQLALCHEMY_TRACK_MODIFICATIONS = False
