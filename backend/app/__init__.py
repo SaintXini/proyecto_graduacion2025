@@ -26,6 +26,13 @@ def create_app(config_name='development'):
     db.init_app(app)
     jwt.init_app(app)
     cors.init_app(app)
+
+    from flask import request
+
+    @app.before_request
+    def handle_options():
+        if request.method == "OPTIONS":
+            return "", 200
     
     
     # Inicializar Flask-Migrate para migraciones de base de datos
