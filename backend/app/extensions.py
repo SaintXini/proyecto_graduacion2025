@@ -14,7 +14,7 @@ jwt = JWTManager()
 # Configurar CORS con los orígenes permitidos
 cors = CORS(
     resources={
-        r"/api/*": {
+        r"/*": {
             "origins": [
                 "http://localhost:3000",    # Create React App
                 "http://localhost:5173",    # Vite
