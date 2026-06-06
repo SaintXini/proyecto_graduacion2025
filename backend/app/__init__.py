@@ -25,18 +25,8 @@ def create_app(config_name='development'):
     # Inicializar extensiones
     db.init_app(app)
     jwt.init_app(app)
+    cors.init_app(app)
     
-    # ✅ Configuración CORS correcta
-    CORS(app, resources={
-        r"/*": {
-            "origins": ["http://localhost:5173", "http://localhost:5174", "https://proyecto-graduacion2025-1.onrender.com"],
-            "methods": ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
-            "allow_headers": ["Content-Type", "Authorization"],
-            "expose_headers": ["Content-Type", "Authorization"],
-            "supports_credentials": True,
-            "max_age": 3600
-        }
-    })
     
     # Inicializar Flask-Migrate para migraciones de base de datos
     migrate = Migrate(app, db)
