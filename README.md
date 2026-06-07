@@ -12,7 +12,11 @@
 ## 🎥 Demo
  
 <!-- Reemplaza TU_VIDEO_ID con el ID de tu video de YouTube (los caracteres después de ?v=) -->
-[![Ver demo del sistema](https://img.youtube.com/vi/TU_VIDEO_ID/0.jpg)](https://www.youtube.com/watch?v=TU_VIDEO_ID)
+[![Ver demo del sistema]
+
+https://github.com/user-attachments/assets/037e4447-a002-46af-8c43-8bf188887006
+
+
  
 ---
  
