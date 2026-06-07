@@ -5,7 +5,7 @@
 >
 > Web platform for child nutritional monitoring and control, designed to facilitate health indicator tracking in vulnerable populations.
  
-🔗 **Live demo:** [https://proyecto-graduacion2025-1.onrender.com/](https://proyecto-graduacion2025-1.onrender.com/)
+🔗 **Live demo:** [https://proy-gra.onrender.com/](https://proy-gra.onrender.com/)
  
 ---
  
@@ -19,9 +19,14 @@
 ## 📸 Screenshots
  
 <!-- Sube tus imágenes a una carpeta llamada "assets" dentro del repo y reemplaza los nombres -->
-![Dashboard principal](assets/screenshot-dashboard.png)
-![Registro de paciente](assets/screenshot-registro.png)
-![Indicadores nutricionales](assets/screenshot-indicadores.png)
+![Dashboard principal](<img width="1617" height="972" alt="image" src="https://github.com/user-attachments/assets/08eb9238-b1ec-4dfb-b193-7cc3c32859c5" />
+)
+![Dashboard de admin](<img width="1452" height="892" alt="image" src="https://github.com/user-attachments/assets/741ac4cb-a01d-4c3a-be03-a58c0b490d3f" />
+)
+![Dashboard de Medico](<img width="1897" height="902" alt="image" src="https://github.com/user-attachments/assets/5db5df62-8f2a-4318-ae29-3e82b8c56fa3" />
+)
+![Indicadores nutricionales](<img width="1737" height="897" alt="image" src="https://github.com/user-attachments/assets/8f7e5f45-3756-4b38-917f-a4a22662b34f" />
+)
  
 ---
  
