@@ -19,14 +19,13 @@
 ## 📸 Screenshots
  
 <!-- Sube tus imágenes a una carpeta llamada "assets" dentro del repo y reemplaza los nombres -->
-![Dashboard principal](<img width="1617" height="972" alt="image" src="https://github.com/user-attachments/assets/08eb9238-b1ec-4dfb-b193-7cc3c32859c5" />
-)
-![Dashboard de admin](<img width="1452" height="892" alt="image" src="https://github.com/user-attachments/assets/741ac4cb-a01d-4c3a-be03-a58c0b490d3f" />
-)
-![Dashboard de Medico](<img width="1897" height="902" alt="image" src="https://github.com/user-attachments/assets/5db5df62-8f2a-4318-ae29-3e82b8c56fa3" />
-)
-![Indicadores nutricionales](<img width="1737" height="897" alt="image" src="https://github.com/user-attachments/assets/8f7e5f45-3756-4b38-917f-a4a22662b34f" />
-)
+![Dashboard principal]<img width="1617" height="972" alt="Screenshot 2026-06-06 210102" src="https://github.com/user-attachments/assets/851d3ede-d490-4de4-adec-f88157cf1a4a" />
+
+![Dashboard de admin]<img width="1453" height="893" alt="Screenshot 2026-06-06 210158" src="https://github.com/user-attachments/assets/981dc46c-71a8-4d2d-9f29-d1eaffd1b2aa" />
+
+![Dashboard de Medico]<img width="1898" height="902" alt="Screenshot 2026-06-06 210305" src="https://github.com/user-attachments/assets/2573b8e3-1f15-4bf5-a3cc-db0e60dda15a" />
+
+![Indicadores nutricionales]<img width="1738" height="897" alt="Screenshot 2026-06-06 210411" src="https://github.com/user-attachments/assets/109f7dfc-d69f-4c74-bf5e-936c57e7d6b2" />
  
 ---
  
